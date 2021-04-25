@@ -29,7 +29,7 @@ function UserTable() {
 
   useEffect(() => {
     getData();
-  }, [localData, formData]);
+  }, [localData, selectedData]);
 
   const getData = () => {
     let localDB = JSON.parse(localStorage.getItem("food"));
@@ -37,14 +37,14 @@ function UserTable() {
   };
 
   //handleCity
-  // const handleCity = (e) => {
-  //   if (formData.city.includes(e.target.value)) {
-  //     let index = formData.city.indexOf(e.target.value);
-  //     formData.city.splice(index, 1);
-  //   } else {
-  //     formData.city.push(e.target.value);
-  //   }
-  // };
+  const handleCity = (e) => {
+    if (formData.city.includes(e.target.value)) {
+      let index = formData.city.indexOf(e.target.value);
+      formData.city.splice(index, 1);
+    } else {
+      formData.city.push(e.target.value);
+    }
+  };
 
   //handleRating
   const handleRating = (e) => {
@@ -62,6 +62,14 @@ function UserTable() {
     localStorage.setItem("food", JSON.stringify(localData));
   };
 
+  //EDIT
+  const handleEdit = (index) => {
+    setIsopen(true);
+    let filteredData = localData.filter((data) => data)[index];
+    selectedData.push(filteredData);
+    console.log(selectedData);
+  };
+
   //UPDATE
   const handleUpdate = (idx) => {
     let data = JSON.parse(localStorage.getItem("food"));
@@ -69,14 +77,6 @@ function UserTable() {
     localStorage.setItem("food", JSON.stringify(data));
     setIsopen(false);
     alert("Data successfully Updated");
-  };
-
-  //EDIT
-  const handleEdit = (index) => {
-    setIsopen(true);
-    let filteredData = localData.filter((data) => data)[index];
-    selectedData.push(filteredData);
-    console.log(selectedData);
   };
 
   return (
@@ -132,22 +132,22 @@ function UserTable() {
                 <input
                   type="radio"
                   defaultChecked={value.food === "Italian"}
-                  defaultValue={value.food}
+                  value="Italian"
                   onChange={handleFood}
-                  id="Italian"
+                  id="italian"
                   name="food"
                 />
-                <label htmlFor="Italian">Italian</label>
+                <label htmlFor="italian">Italian</label>
                 <br />
                 <input
                   type="radio"
                   defaultChecked={value.food === "Chinese"}
-                  defaultValue={value.food}
+                  value="Chinese"
                   onChange={handleFood}
-                  id="Chinese"
+                  id="chinese"
                   name="food"
                 />
-                <label htmlFor="Italian">Chinese</label>
+                <label htmlFor="chinese">Chinese</label>
                 <br />
                 <br />
                 <label>
@@ -162,36 +162,30 @@ function UserTable() {
                 <br />
                 <br />
                 <b>City: </b>
-                {value.city.map((c) => {
-                  return (
-                    <div>
-                      <input
-                        type="checkbox"
-                        id="chd"
-                        // defaultValue={c}
-                        defaultChecked={c === "Chandigarh"}
-                        // onChange={handleCity}
-                      />
-                      <label htmlFor="chd">Chandigarh</label>
-                      <input
-                        type="checkbox"
-                        id="mohali"
-                        // defaultValue={c}
-                        defaultChecked={c === "Mohali"}
-                        // onChange={handleCity}
-                      />
-                      <label htmlFor="mohali">Mohali</label>
-                      <input
-                        type="checkbox"
-                        id="pchk"
-                        // defaultValue={c}
-                        defaultChecked={c === "Panchkula"}
-                        // onChange={handleCity}
-                      />
-                      <label htmlFor="pchk">Panchkula</label>
-                    </div>
-                  );
-                })}
+                <input
+                  type="checkbox"
+                  id="chd"
+                  value="Chandigarh"
+                  defaultChecked={value.city === "Chandigarh"}
+                  onChange={handleCity}
+                />
+                <label htmlFor="chd">Chandigarh</label>
+                <input
+                  type="checkbox"
+                  id="mohali"
+                  value="Mohali"
+                  defaultChecked={value.city === "Mohali"}
+                  onChange={handleCity}
+                />
+                <label htmlFor="mohali">Mohali</label>
+                <input
+                  type="checkbox"
+                  id="pchk"
+                  value="Panchkula"
+                  defaultChecked={value.city === "Panchkula"}
+                  onChange={handleCity}
+                />
+                <label htmlFor="pchk">Panchkula</label>
 
                 <br />
                 <br />

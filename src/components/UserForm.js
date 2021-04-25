@@ -56,7 +56,7 @@ function UserForm(props) {
           value="Italian"
           onChange={handleFood}
         />
-        <label htmlFor="chinese">Italian</label>
+        <label htmlFor="italian">Italian</label>
         <br />
         <input
           type="radio"
