@@ -1,44 +1,44 @@
 import React, { useState } from "react";
 
 function UserForm(props) {
-  const [foodChoice, setFoodChoice] = useState("Italian");
-  const [getRating, setRating] = useState();
-  const [checked, setChecked] = useState([]);
+  const [foodData, setFoodData] = useState({
+    food: "Italian",
+    ratings: "",
+    city: [],
+  });
 
-  //handleCheck
-  const handleCheck = (e) => {
-    if (checked.includes(e.target.value)) {
-      let idx = checked.indexOf(e.target.value);
-      checked.splice(idx, 1);
-
-      return;
+  //handleCity
+  const handleCity = (e) => {
+    if (foodData.city.includes(e.target.value)) {
+      let index = foodData.city.indexOf(e.target.value);
+      foodData.city.splice(index, 1);
     } else {
-      setChecked([...checked, e.target.value]);
+      foodData.city.push(e.target.value);
     }
   };
 
-  console.log(checked);
+  //handleRating
+  const handleRating = (e) => {
+    setFoodData({ ...foodData, ratings: e.target.value });
+  };
+
+  //handleFood
+  const handleFood = (e) => {
+    setFoodData({ ...foodData, food: e.target.value });
+  };
 
   //submit button
   const handleSubmit = () => {
-    let food = [];
-    let foodData = JSON.parse(localStorage.getItem("food"));
-    if (foodData === null) {
-      let obj = {};
-      obj["food"] = foodChoice;
-      obj["rating"] = getRating;
-      obj["city"] = checked;
-      food.push(obj);
-      localStorage.setItem("food", JSON.stringify(food));
+    let foodArray = [];
+    let localData = JSON.parse(localStorage.getItem("food"));
+    if (localData === null) {
+      foodArray.push(foodData);
+      localStorage.setItem("food", JSON.stringify(foodArray));
     } else {
-      let obj = {};
-      obj["food"] = foodChoice;
-      obj["rating"] = getRating;
-      obj["city"] = checked;
-      foodData.push(obj);
-      localStorage.setItem("food", JSON.stringify(foodData));
+      localData.push(foodData);
+      localStorage.setItem("food", JSON.stringify(localData));
     }
-    props.history.push("/view");
+    alert("Item added successfully", props.history.push("/view"));
   };
   return (
     <div>
@@ -50,62 +50,67 @@ function UserForm(props) {
         <br />
         <input
           type="radio"
-          label="Italian"
-          checked={foodChoice === "Italian"}
-          value={foodChoice}
-          onClick={() => setFoodChoice("Italian")}
+          id="italian"
+          name="food"
+          checked={foodData.food === "Italian"}
+          value="Italian"
+          onChange={handleFood}
         />
-        Italian
+        <label htmlFor="chinese">Italian</label>
         <br />
         <input
           type="radio"
-          label="Chinese"
-          checked={foodChoice === "Chinese"}
-          value={foodChoice}
-          onClick={() => setFoodChoice("Chinese")}
+          id="chinese"
+          name="food"
+          checked={foodData.food === "Chinese"}
+          value="Chinese"
+          onChange={handleFood}
         />
-        Chinese
+        <label htmlFor="chinese">Chinese</label>
         <br />
         <br />
         <label>
           <b>Ratings: </b>
         </label>
         <br />
-        <select onChange={(e) => setRating(e.target.value)}>
-          <option>5 stars</option>
-          <option>4 stars</option>
-          <option>3 stars</option>
+        <select onChange={handleRating}>
+          <option value="5">5 stars</option>
+          <option value="4">4 stars</option>
+          <option value="3">3 stars</option>
         </select>
         <br />
         <br />
         <div>
           <b>City: </b>
           <br />
-          <label>Chandigarh</label>
           <input
             type="checkbox"
             name="city"
-            value="chandigarh"
-            onChange={handleCheck}
+            value="Chandigarh"
+            id="chd"
+            onChange={handleCity}
           />
+          <label htmlFor="chd">Chandigarh</label>
         </div>
         <div>
-          <label>Panchkula</label>
           <input
             type="checkbox"
             name="city"
-            value="panchkula"
-            onChange={handleCheck}
+            value="Panchkula"
+            id="pchk"
+            onChange={handleCity}
           />
+          <label htmlFor="pchk">Panchkula</label>
         </div>
         <div>
-          <label>Mohali</label>
           <input
             type="checkbox"
             name="city"
-            value="mohali"
-            onChange={handleCheck}
+            value="Mohali"
+            id="mohali"
+            onChange={handleCity}
           />
+          <label htmlFor="mohali">Mohali</label>
         </div>
         <br />
         <br />

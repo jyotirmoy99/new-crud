@@ -17,35 +17,43 @@ const customStyles = {
 
 function UserTable() {
   const [localData, setLocalData] = useState([]);
+  const [selectedData, setSelectedData] = useState([]);
+  const [formData, setFormData] = useState({
+    food: "",
+    ratings: "",
+    city: [],
+  });
 
-  let [newFormData, setnewFormData] = useState({}); //new form for updating the object
-  const [array, setArray] = useState([]); //it is used to map the new array where the new form data is stored
-  let [indexID, setindexID] = useState(null); //get single id
   //modal
   const [isopen, setIsopen] = useState(false);
-  const [checked, setChecked] = useState([]);
-  const [foodChoice, setFoodChoice] = useState("Italian");
-  const [getRating, setRating] = useState();
 
   useEffect(() => {
     getData();
-  }, [localData]);
+  }, [localData, formData]);
 
   const getData = () => {
     let localDB = JSON.parse(localStorage.getItem("food"));
     setLocalData(localDB);
   };
 
-  //handleCheck
-  const handleCheck = (e) => {
-    if (checked.includes(e.target.value)) {
-      let idx = checked.indexOf(e.target.value);
-      checked.splice(idx, 1);
+  //handleCity
+  // const handleCity = (e) => {
+  //   if (formData.city.includes(e.target.value)) {
+  //     let index = formData.city.indexOf(e.target.value);
+  //     formData.city.splice(index, 1);
+  //   } else {
+  //     formData.city.push(e.target.value);
+  //   }
+  // };
 
-      return;
-    } else {
-      setChecked([...checked, e.target.value]);
-    }
+  //handleRating
+  const handleRating = (e) => {
+    setFormData({ ...formData, ratings: e.target.value });
+  };
+
+  //handleFood
+  const handleFood = (e) => {
+    setFormData({ ...formData, food: e.target.value });
   };
 
   //DELETE
@@ -55,20 +63,20 @@ function UserTable() {
   };
 
   //UPDATE
-  const handleUpdate = (id) => {
+  const handleUpdate = (idx) => {
     let data = JSON.parse(localStorage.getItem("food"));
-    data.splice(indexID, 1, newFormData);
+    data.splice(idx, 1, formData);
     localStorage.setItem("food", JSON.stringify(data));
     setIsopen(false);
     alert("Data successfully Updated");
   };
 
   //EDIT
-  const handleEdit = (value, index) => {
-    setnewFormData({ ...value });
+  const handleEdit = (index) => {
     setIsopen(true);
-    setindexID(index);
-    array.splice(0, 1, value);
+    let filteredData = localData.filter((data) => data)[index];
+    selectedData.push(filteredData);
+    console.log(selectedData);
   };
 
   return (
@@ -88,11 +96,15 @@ function UserTable() {
             return (
               <tr>
                 <td>{value.food}</td>
-                <td>{value.rating}</td>
-                <td>{value.city}</td>
+                <td>{value.ratings}</td>
+                <td>
+                  {value.city.map((c) => {
+                    return <p>{c}</p>;
+                  })}
+                </td>
                 <button
                   className="btn btn-warning"
-                  onClick={() => handleEdit(value, index)}
+                  onClick={() => handleEdit(index)}
                 >
                   Edit
                 </button>
@@ -111,76 +123,82 @@ function UserTable() {
       {/* MODAL START */}
       <Modal isOpen={isopen} style={customStyles}>
         <h2 style={{ textAlign: "center" }}>Update</h2>
-        {array.map((value, index) => {
+        {selectedData.map((value, index) => {
           return (
-            <div className="form-group">
+            <div className="form-group" key={index}>
               <form>
-                <label>
-                  <b>Food: </b>
-                </label>
+                <b>Food: </b>
                 <br />
                 <input
                   type="radio"
-                  label="Italian"
-                  checked={foodChoice === "Italian"}
-                  value={foodChoice}
-                  onClick={() => setFoodChoice("Italian")}
+                  defaultChecked={value.food === "Italian"}
+                  defaultValue={value.food}
+                  onChange={handleFood}
+                  id="Italian"
+                  name="food"
                 />
-                Italian
+                <label htmlFor="Italian">Italian</label>
                 <br />
                 <input
                   type="radio"
-                  label="Chinese"
-                  checked={foodChoice === "Chinese"}
-                  value={foodChoice}
-                  onClick={() => setFoodChoice("Chinese")}
+                  defaultChecked={value.food === "Chinese"}
+                  defaultValue={value.food}
+                  onChange={handleFood}
+                  id="Chinese"
+                  name="food"
                 />
-                Chinese
+                <label htmlFor="Italian">Chinese</label>
                 <br />
                 <br />
                 <label>
                   <b>Ratings: </b>
                 </label>
                 <br />
-                <select onChange={(e) => setRating(e.target.value)}>
-                  <option>5 stars</option>
-                  <option>4 stars</option>
-                  <option>3 stars</option>
+                <select onChange={handleRating} defaultValue={value.ratings}>
+                  <option value="5">5 stars</option>
+                  <option value="4">4 stars</option>
+                  <option value="3">3 stars</option>
                 </select>
                 <br />
                 <br />
-                <div>
-                  <b>City: </b>
-                  <br />
-                  <label>Chandigarh</label>
-                  <input
-                    type="checkbox"
-                    name="city"
-                    value="chandigarh"
-                    onChange={handleCheck}
-                  />
-                </div>
-                <div>
-                  <label>Panchkula</label>
-                  <input
-                    type="checkbox"
-                    name="city"
-                    value="panchkula"
-                    onChange={handleCheck}
-                  />
-                </div>
-                <div>
-                  <label>Mohali</label>
-                  <input
-                    type="checkbox"
-                    name="city"
-                    value="mohali"
-                    onChange={handleCheck}
-                  />
-                </div>
+                <b>City: </b>
+                {value.city.map((c) => {
+                  return (
+                    <div>
+                      <input
+                        type="checkbox"
+                        id="chd"
+                        // defaultValue={c}
+                        defaultChecked={c === "Chandigarh"}
+                        // onChange={handleCity}
+                      />
+                      <label htmlFor="chd">Chandigarh</label>
+                      <input
+                        type="checkbox"
+                        id="mohali"
+                        // defaultValue={c}
+                        defaultChecked={c === "Mohali"}
+                        // onChange={handleCity}
+                      />
+                      <label htmlFor="mohali">Mohali</label>
+                      <input
+                        type="checkbox"
+                        id="pchk"
+                        // defaultValue={c}
+                        defaultChecked={c === "Panchkula"}
+                        // onChange={handleCity}
+                      />
+                      <label htmlFor="pchk">Panchkula</label>
+                    </div>
+                  );
+                })}
+
                 <br />
                 <br />
-                <button className="btn btn-info" onClick={() => handleUpdate()}>
+                <button
+                  className="btn btn-info"
+                  onClick={() => handleUpdate(index, value)}
+                >
                   Update
                 </button>
               </form>
