@@ -36,11 +36,14 @@ function UserTable() {
     setLocalData(localDB);
   };
 
+  const cities = ["Mohali", "Chandigarh", "Panchkula"];
+
   //handleCity
   const handleCity = (e) => {
     if (formData.city.includes(e.target.value)) {
-      let index = formData.city.indexOf(e.target.value);
-      formData.city.splice(index, 1);
+      let idx = formData.city.indexOf(e.target.value);
+      formData.city.splice(idx, 1);
+      return;
     } else {
       formData.city.push(e.target.value);
     }
@@ -63,7 +66,8 @@ function UserTable() {
   };
 
   //EDIT
-  const handleEdit = (index) => {
+  const handleEdit = (value, index) => {
+    setFormData({ ...value });
     setIsopen(true);
     let filteredData = localData.filter((data) => data)[index];
     selectedData.push(filteredData);
@@ -104,7 +108,7 @@ function UserTable() {
                 </td>
                 <button
                   className="btn btn-warning"
-                  onClick={() => handleEdit(index)}
+                  onClick={() => handleEdit(value, index)}
                 >
                   Edit
                 </button>
@@ -155,6 +159,7 @@ function UserTable() {
                 </label>
                 <br />
                 <select onChange={handleRating} defaultValue={value.ratings}>
+                  <option>STARS</option>
                   <option value="5">5 stars</option>
                   <option value="4">4 stars</option>
                   <option value="3">3 stars</option>
@@ -162,7 +167,7 @@ function UserTable() {
                 <br />
                 <br />
                 <b>City: </b>
-                <input
+                {/* <input
                   type="checkbox"
                   id="chd"
                   value="Chandigarh"
@@ -185,7 +190,7 @@ function UserTable() {
                   defaultChecked={value.city === "Panchkula"}
                   onChange={handleCity}
                 />
-                <label htmlFor="pchk">Panchkula</label>
+                <label htmlFor="pchk">Panchkula</label> */}
                 {/* {value.city.map((c, index) => {
                   return (
                     <div key={index}>
@@ -216,6 +221,19 @@ function UserTable() {
                     </div>
                   );
                 })} */}
+                {cities.map((city, key) => (
+                  <div>
+                    <span>
+                      <label key={key}>{city}:</label>
+                      <input
+                        type="checkbox"
+                        value={city}
+                        defaultChecked={value.city.includes(city)}
+                        onChange={handleCity}
+                      />
+                    </span>
+                  </div>
+                ))}
 
                 <br />
                 <br />
