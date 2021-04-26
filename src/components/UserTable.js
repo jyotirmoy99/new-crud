@@ -16,11 +16,12 @@ const customStyles = {
 };
 
 function UserTable() {
+  const [idx, setIdx] = useState(null);
   const [localData, setLocalData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
   const [formData, setFormData] = useState({
     food: "",
-    ratings: "",
+    ratings: "5",
     city: [],
   });
 
@@ -69,11 +70,12 @@ function UserTable() {
   const handleEdit = (value, index) => {
     setFormData({ ...value });
     setIsopen(true);
+    setIdx(index);
     selectedData.splice(0, 1, value);
   };
 
   //UPDATE
-  const handleUpdate = (idx) => {
+  const handleUpdate = (id) => {
     let data = JSON.parse(localStorage.getItem("food"));
     data.splice(idx, 1, formData);
     localStorage.setItem("food", JSON.stringify(data));
@@ -157,7 +159,6 @@ function UserTable() {
                 </label>
                 <br />
                 <select onChange={handleRating} defaultValue={value.ratings}>
-                  <option className="font-weight-bold">STARS</option>
                   <option value="5">5 stars</option>
                   <option value="4">4 stars</option>
                   <option value="3">3 stars</option>
@@ -235,10 +236,7 @@ function UserTable() {
 
                 <br />
                 <br />
-                <button
-                  className="btn btn-info"
-                  onClick={() => handleUpdate(index, value)}
-                >
+                <button className="btn btn-info" onClick={() => handleUpdate()}>
                   Update
                 </button>
               </form>

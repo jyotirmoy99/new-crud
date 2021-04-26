@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function UserForm(props) {
   const [foodData, setFoodData] = useState({
     food: "",
-    ratings: "",
+    ratings: "5",
     city: [],
   });
 
@@ -74,7 +74,6 @@ function UserForm(props) {
         </label>
         <br />
         <select onChange={handleRating}>
-          <option className="font-weight-bold">STARS</option>
           <option value="5">5 stars</option>
           <option value="4">4 stars</option>
           <option value="3">3 stars</option>
