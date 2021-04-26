@@ -29,7 +29,7 @@ function UserTable() {
 
   useEffect(() => {
     getData();
-  }, [localData, selectedData]);
+  }, [localData]);
 
   const getData = () => {
     let localDB = JSON.parse(localStorage.getItem("food"));
@@ -69,9 +69,7 @@ function UserTable() {
   const handleEdit = (value, index) => {
     setFormData({ ...value });
     setIsopen(true);
-    let filteredData = localData.filter((data) => data)[index];
-    selectedData.push(filteredData);
-    console.log(selectedData);
+    selectedData.splice(0, 1, value);
   };
 
   //UPDATE
@@ -159,7 +157,7 @@ function UserTable() {
                 </label>
                 <br />
                 <select onChange={handleRating} defaultValue={value.ratings}>
-                  <option>STARS</option>
+                  <option className="font-weight-bold">STARS</option>
                   <option value="5">5 stars</option>
                   <option value="4">4 stars</option>
                   <option value="3">3 stars</option>

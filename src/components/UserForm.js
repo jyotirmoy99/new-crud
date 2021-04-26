@@ -74,7 +74,7 @@ function UserForm(props) {
         </label>
         <br />
         <select onChange={handleRating}>
-          <option>STARS</option>
+          <option className="font-weight-bold">STARS</option>
           <option value="5">5 stars</option>
           <option value="4">4 stars</option>
           <option value="3">3 stars</option>
