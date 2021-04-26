@@ -186,6 +186,36 @@ function UserTable() {
                   onChange={handleCity}
                 />
                 <label htmlFor="pchk">Panchkula</label>
+                {/* {value.city.map((c, index) => {
+                  return (
+                    <div key={index}>
+                      <input
+                        type="checkbox"
+                        id="chd"
+                        value="Chandigarh"
+                        defaultChecked={c === "Chandigarh"}
+                        onChange={handleCity}
+                      ></input>
+                      <label htmlFor="chd">Chandigarh</label>
+                      <input
+                        type="checkbox"
+                        id="mohali"
+                        value="Mohali"
+                        defaultChecked={c === "Mohali"}
+                        onChange={handleCity}
+                      ></input>
+                      <label htmlFor="mohali">Mohali</label>
+                      <input
+                        type="checkbox"
+                        id="pchk"
+                        value="Panchkula"
+                        defaultChecked={c === "Panchkula"}
+                        onChange={handleCity}
+                      ></input>
+                      <label htmlFor="pchk">Panchkula</label>
+                    </div>
+                  );
+                })} */}
 
                 <br />
                 <br />
